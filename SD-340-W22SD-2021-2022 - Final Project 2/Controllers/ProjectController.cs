@@ -24,7 +24,7 @@ namespace SD_340_W22SD_2021_2022___Final_Project_2.Controllers
         public async Task<IActionResult> Index(string? hours, string? priority, bool? completed)
         {
             List<Project>? projects = null;
-
+            //
             try
             {
                 ApplicationUser user = await _userManager.FindByNameAsync(User.Identity.Name);
