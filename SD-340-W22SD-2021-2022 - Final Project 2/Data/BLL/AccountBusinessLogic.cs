@@ -8,16 +8,24 @@ namespace SD_340_W22SD_2021_2022___Final_Project_2.Data.BLL
 {
     public class AccountBusinessLogic
     {
-        private ProjectRepository _repo;
+        public ProjectRepository repo;
         private UserManager<ApplicationUser> _userManager;
-        public AccountBusinessLogic(ProjectRepository repo)
+        public ApplicationDbContext _context { get; set; }
+        public AccountBusinessLogic(ProjectRepository repo, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
-            _repo = repo;
+            repo = repo;
+            _context = context;
+            _userManager = userManager;
+        }
+        public AccountBusinessLogic(ApplicationDbContext applicationDbContext)
+        {
+            _context = applicationDbContext;
+
         }
 
         public Project ProjectDetails (int projectID)
         {
-            Project project = _repo.Get(projectID);
+            Project project = repo.Get(projectID);
             if (project != null)
             {
                 return project;
@@ -37,17 +45,17 @@ namespace SD_340_W22SD_2021_2022___Final_Project_2.Data.BLL
                 ApplicationUser dev = await _userManager.FindByIdAsync(developer);
                 newProject.Developers.Add(dev);
             }
-            _repo.Add(newProject);
+            repo.Add(newProject);
         }
 
         public ICollection<ApplicationUser> UnassignedDeveloperCheck()
         {
-            return _repo.GetAllUsers();
+            return repo.GetAllUsers();
         }
 
         public void AssignDeveloper(int id)
         {
-            ApplicationUser user = _repo.FindUser(id);
+            ApplicationUser user = repo.FindUser(id);
             
             if (id != null)
             {
@@ -62,7 +70,7 @@ namespace SD_340_W22SD_2021_2022___Final_Project_2.Data.BLL
 
         public void AssignProjectManager(int id)
         {
-            ApplicationUser user = _repo.FindUser(id);
+            ApplicationUser user = repo.FindUser(id);
 
             if (id != null)
             {
@@ -75,6 +83,8 @@ namespace SD_340_W22SD_2021_2022___Final_Project_2.Data.BLL
             }
 
         }
+
+        
 
 
 
